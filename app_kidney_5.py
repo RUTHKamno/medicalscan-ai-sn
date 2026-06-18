@@ -127,193 +127,165 @@ CTX: dict = {
     "Stone":  {"urgence": "Modérée", "suivi": "Consultation urologique"},
     "Tumor":  {"urgence": "⚠️ ÉLEVÉE", "suivi": "IRM + avis urologique urgent"}
 }
-# §5 ── Design System CSS (Style sombre unifié : Correction absolue des Selectbox, du Softmax et des Textes) ──
+
+# §5 ── Design System CSS (Retour au Style Initial + Corrections ciblées) ──
 _CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
 
-/* ── 1. FOND DE PAGE ET TEXTE GLOBAL ── */
-html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-testid="stAppViewBlockContainer"] {
-    background-color: #0b0f19 !important;
-    background: #0b0f19 !important;
-    font-family: 'Inter', sans-serif !important;
-    color: #ffffff !important;
+/* ── 1. UNIFORMISATION STRICTE DU FOND DE PAGE ET DE LA SIDEBAR ── */
+html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-testid="stAppViewBlockContainer"], section[data-testid="stSidebar"] {
+    margin: 0; padding: 0;
+    background-color: #020818 !important;
+    background: #020818 !important; /* Même couleur de fond partout */
+    font-family: 'Exo 2', sans-serif;
+    color: #e0eaff !important;
 }
 
 [data-testid="stHeader"] {
-    background: #0b0f19 !important;
-    border-bottom: 1px solid #1e293b;
+    background: rgba(2,8,24,0.85) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(66,165,245,0.15);
+    z-index: 100;
 }
 
-/* Forçage absolu de tous les textes basiques en blanc pur */
-[data-testid="stMarkdownContainer"] p, 
-[data-testid="stMarkdownContainer"] span, 
-[data-testid="stMarkdownContainer"] li,
-[data-testid="stMarkdownContainer"] strong,
-.stChatMessage p,
-p, span, label {
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
+.main .block-container { 
+    background: transparent !important; 
+    padding-top: 2rem; 
 }
 
-/* ── 2. CORRECTION CRITIQUE DES SELECTBOX (SÉLECTEUR DE MODÈLES ET LANGUES) ── */
-/* Force le conteneur du selectbox, la liste déroulante et le texte sélectionné à être parfaitement visibles */
-.stSelectbox div[data-baseweb="select"], 
-.stSelectbox [data-testid="stWidgetLabel"] p,
-div[role="listbox"], 
-div[aria-haspopup="listbox"],
-[data-baseweb="select"] * {
-    background-color: #1e293b !important;
-    background: #1e293b !important;
-    color: #ffffff !important;
-    border-color: #334155 !important;
-    -webkit-text-fill-color: #ffffff !important;
+/* Ajustements Sidebar */
+section[data-testid="stSidebar"] {
+    border-right: 1px solid rgba(66,165,245,0.2) !important;
+    box-shadow: 4px 0 40px rgba(0,0,0,0.6);
+    z-index: 50;
+}
+[data-testid="stSidebar"] * { color: #c8deff !important; }
+[data-testid="stSidebar"] label p {
+    color: #90caf9 !important;
+    font-weight: 600;
 }
 
-/* Force les options à l'intérieur du menu déroulant quand on clique dessus */
-ul[role="listbox"] li, [data-baseweb="popover"] * {
-    background-color: #1e293b !important;
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-}
-ul[role="listbox"] li:hover {
-    background-color: #2563eb !important; /* Fond bleu au survol de l'option */
-}
-
-/* ── 3. CORRECTION TOTALE DU SOFTMAX (TOUTES LES CLASSES, MÊME FAIBLES) ── */
-.prob-row { 
-    display: flex !important; 
-    align-items: center !important; 
-    gap: 12px !important; 
-    margin: 8px 0 !important; 
-}
-
-/* Force le nom de TOUTES les classes (sélectionnées ou non) en blanc pur bien visible */
-.prob-name, .prob-name.prob-top, [style*="width:65px"], [style*="width: 65px"] { 
-    color: #ffffff !important; 
-    -webkit-text-fill-color: #ffffff !important;
-    font-size: 13px !important; 
-    font-weight: 600 !important;
-    width: 80px !important; 
-    flex-shrink: 0 !important;
-}
-
-/* Force le pourcentage de TOUTES les classes à être bleu clair et visible */
-.prob-pct, .prob-pct.prob-top, [style*="width:46px"], [style*="width: 46px"] { 
-    color: #38bdf8 !important; 
-    -webkit-text-fill-color: #38bdf8 !important;
-    font-size: 13px !important; 
-    font-weight: 600 !important;
-    width: 50px !important; 
-    text-align: right !important; 
-    flex-shrink: 0 !important;
-}
-
-/* Conteneur de la barre de progression arrière-plan */
-.prob-track { 
-    flex: 1 !important; 
-    height: 10px !important; 
-    background-color: #334155 !important; 
-    background: #334155 !important;
-    border-radius: 999px !important; 
-    overflow: hidden !important; 
-    border: none !important;
-}
-
-/* ── 4. CHAT INPUT, INPUTS TEXTES & COHÉRENCE ── */
+/* ── 2. CORRECTION DES INPUTS, SELECTBOX ET CHAT_INPUT (TEXTE VISIBLE) ── */
 .stTextInput input, 
 .stTextArea textarea,
+.stSelectbox div[data-baseweb="select"],
+[data-baseweb="select"] *,
 [data-testid="stChatInput"] textarea,
 .stChatInput textarea,
 div[data-baseweb="input"] input {
-    background-color: #1e293b !important;
-    background: #1e293b !important;
+    background-color: #0d1f3c !important;
+    background: #0d1f3c !important;
     color: #ffffff !important;
-    border: 1px solid #334155 !important;
-    border-radius: 8px !important;
+    border: 1px solid rgba(66,165,245,0.3) !important;
+    border-radius: 10px !important;
     -webkit-text-fill-color: #ffffff !important;
 }
 
-[data-testid="stChatInput"] {
-    padding: 10px !important;
-    background-color: #0b0f19 !important;
+/* Menu déroulant des selectbox */
+ul[role="listbox"] li, [data-baseweb="popover"] * {
+    background-color: #0d1f3c !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
 }
 
-[data-testid="stChatInput"] button {
-    background-color: #2563eb !important;
+/* ── 3. CORRECTION DU SOFTMAX (TEXTE VISIBLE POUR TOUTES LES CLASSES) ── */
+.prob-row { display:flex; align-items:center; gap:10px; margin:8px 0; }
+
+.prob-name {
+    font-family:'Share Tech Mono',monospace; font-size:13px;
+    color: #ffffff !important; /* Forcé en blanc pur pour toutes les classes */
+    -webkit-text-fill-color: #ffffff !important;
+    width:75px; flex-shrink:0; letter-spacing:0.5px;
+    font-weight: 600;
+}
+.prob-track { flex:1; height:8px; background:rgba(255,255,255,0.12); border-radius:4px; overflow:hidden; border:1px solid rgba(255,255,255,0.15); }
+.prob-fill  { height:100%; border-radius:4px; transition: width 0.8s ease; }
+.prob-pct   {
+    font-family:'Share Tech Mono',monospace; font-size:13px;
+    color: #42a5f5 !important; /* Forcé en bleu clair visible pour toutes les classes */
+    -webkit-text-fill-color: #42a5f5 !important;
+    width:50px; text-align:right; flex-shrink:0; font-weight:600;
+}
+
+/* ── 4. PANNEAUX, MÉTRIQUES ET DESIGN INITIAL RELESTÉ ── */
+[data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"] {
+    background: rgba(4,15,40,0.55);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+}
+
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    gap: 4px; background: rgba(2,8,24,0.75); backdrop-filter: blur(16px);
+    border-radius: 14px; padding: 6px; border: 1px solid rgba(66,165,245,0.2);
+}
+[data-testid="stTabs"] [data-baseweb="tab"] {
+    border-radius: 10px; padding: 10px 22px;
+    font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 13px;
+    color: #5a8fbf !important; background: transparent !important;
+}
+[data-testid="stTabs"] [aria-selected="true"] {
+    background: linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1e88e5 100%) !important;
     color: #ffffff !important;
 }
 
-[data-testid="stChatInput"] svg {
-    fill: #ffffff !important;
-    color: #ffffff !important;
+/* Boutons */
+.stButton > button {
+    background: linear-gradient(135deg,#0a2a5e 0%,#0d47a1 40%,#1976d2 80%,#42a5f5 100%) !important;
+    color: white !important;
+    border: 1px solid rgba(66,165,245,0.4) !important;
+    border-radius: 12px; padding: 12px 32px;
+    font-family: 'Exo 2', sans-serif; font-weight: 700; text-transform: uppercase;
+    box-shadow: 0 0 30px rgba(13,71,161,0.5);
+}
+.stButton > button:hover {
+    box-shadow: 0 0 50px rgba(66,165,245,0.7);
+    border-color: rgba(66,165,245,0.8) !important;
 }
 
-/* ── 5. BLOCS DE RÉSULTATS, MÉTRIQUES ET RAG ── */
-[data-testid="metric-container"], 
-div[data-testid="stMetric"], 
-.stMetric,
-.ct-result-card, 
-.sb-card, 
-.hero-card,
-.info-box, .sum-card, .sum-de-card, .de-box, .audio-box {
-    background-color: #1e293b !important;
-    background: #1e293b !important;
-    border: 1px solid #334155 !important;
-    border-radius: 8px !important;
-    color: #ffffff !important;
+/* Métriques */
+[data-testid="metric-container"] {
+    background: linear-gradient(135deg,rgba(13,71,161,0.22) 0%,rgba(5,20,50,0.7) 100%) !important;
+    border: 1px solid rgba(66,165,245,0.25) !important;
+    border-radius: 14px; padding: 18px 20px;
+}
+[data-testid="metric-container"] label {
+    color: #5a8fbf !important; font-size: 11px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+}
+[data-testid="metric-container"] [data-testid="stMetricValue"] {
+    color: #42a5f5 !important; font-family: 'Orbitron', monospace !important;
+    font-size: 20px !important; font-weight: 700;
 }
 
-/* Métriques (Labels en gris/bleu, Valeurs en bleu ciel très vif) */
-[data-testid="metric-container"] label, div[data-testid="stMetric"] label, .mon-lbl {
-    color: #94a3b8 !important;
-    -webkit-text-fill-color: #94a3b8 !important;
-    font-size: 12px !important;
-    text-transform: uppercase !important;
-}
-[data-testid="metric-container"] [data-testid="stMetricValue"], div[data-testid="stMetric"] [data-testid="stMetricValue"], .mon-val {
-    color: #38bdf8 !important;
-    -webkit-text-fill-color: #38bdf8 !important;
-    font-size: 24px !important;
-    font-weight: 700 !important;
+/* Cartes de résultats RAG et IA */
+.ct-result-card, .info-box, .sum-card, .sum-de-card, .de-box {
+    background: #0d1f3c !important;
+    border: 1px solid rgba(66,165,245,0.35) !important;
+    border-radius: 16px; padding: 20px 18px;
+    color: #e0eaff !important;
 }
 
-/* Boîtes d'alertes médicales RAG */
-.al { border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
-.al-b { color: #ffffff !important; font-size: 13px; }
-.al-t { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-.al-r { background: #2d1616 !important; border: 1px solid #ef4444 !important; border-left: 4px solid #ef4444 !important; }
-.al-r .al-t { color: #fca5a5 !important; }
-.al-o { background: #2a1a10 !important; border: 1px solid #f97316 !important; border-left: 4px solid #f97316 !important; }
-.al-o .al-t { color: #fdba74 !important; }
-.al-b2 { background: #172554 !important; border: 1px solid #3b82f6 !important; border-left: 4px solid #3b82f6 !important; }
-.al-b2 .al-t { color: #93c5fd !important; }
-.al-g { background: #064e3b !important; border: 1px solid #10b981 !important; border-left: 4px solid #10b981 !important; }
-.al-g .al-t { color: #6ee7b7 !important; }
-
-/* ── 6. BOUTONS STANDARDS ── */
-.stButton > button, [data-testid="stBaseButton-secondary"] {
-    background: #2563eb !important;
-    color: #ffffff !important;
-    border: 1px solid #3b82f6 !important;
-    border-radius: 6px !important;
-    font-weight: 600 !important;
-}
-.stButton > button:hover, [data-testid="stBaseButton-secondary"]:hover {
-    background: #1d4ed8 !important;
-    color: #ffffff !important;
+.stChatMessage {
+    background: rgba(4,15,40,0.7) !important;
+    border: 1px solid rgba(66,165,245,0.2) !important;
+    border-radius: 12px !important;
 }
 
-/* ── 7. ONGLETS (TABS) ── */
-[data-testid="stTabs"] [data-baseweb="tab-list"] { background: #0f172a !important; border-radius: 8px; padding: 4px; border: 1px solid #1e293b; }
-[data-testid="stTabs"] [data-baseweb="tab"] { color: #94a3b8 !important; font-weight: 600; }
-[data-testid="stTabs"] [data-baseweb="tab"]:hover { color: #ffffff !important; background: rgba(30, 41, 59, 0.5) !important; }
-[data-testid="stTabs"] [aria-selected="true"] { background: #2563eb !important; color: #ffffff !important; border-radius: 6px; }
-
-#ai-bg-canvas, [data-testid="stMain"]::after {
-    display: none !important;
-    content: none !important;
+/* Titres & Dégradés animés */
+.hero-title {
+    font-family: 'Orbitron', monospace; font-size: 48px; font-weight: 900;
+    background: linear-gradient(90deg,#0d47a1,#42a5f5,#7c4dff,#00b4d8,#42a5f5,#0d47a1);
+    background-size: 400% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 5s linear infinite; text-align: center; margin-bottom: 6px;
 }
+.hero-subtitle { color: #5a8fbf; text-align: center; font-size: 11px; letter-spacing: 5px; font-family: 'Share Tech Mono', monospace; }
+.section-title {
+    font-family: 'Orbitron', monospace; font-size: 20px; font-weight: 700;
+    background: linear-gradient(90deg,#42a5f5,#7c4dff,#00b4d8,#42a5f5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+@keyframes shimmer { 0% { background-position: 0% center; } 100% { background-position: 300% center; } }
 </style>
 """
 st.markdown(_CSS, unsafe_allow_html=True)
