@@ -90,7 +90,7 @@ CLASS_CFG: dict = {
         "neon": "rgba(255,152,0,0.6)",
     },
     "Tumor": {
-        "color": "#ff5252", "bg": "rgba(120,0,0,0.22)", "border": "rgba(255,82,82,0.4)",
+        "color": "#ff5252", "bg": "rgba(120,0,0,0.22)", "border": "rgba(120,0,0,0.4)",
         "label": "Tumeur rénale", "urgence": "Élevée ⚠️", "emoji": "🔴",
         "neon": "rgba(255,82,82,0.6)",
     },
@@ -129,12 +129,12 @@ CTX: dict = {
     "Tumor":  {"urgence": "⚠️ ÉLEVÉE — consultation urgente",    "suivi": "IRM + avis urologique urgent"},
 }
 
-# §5 ── Design System CSS (StockSight Style Modifié) ───────────────────────────
+# §5 ── Design System CSS ──────────────────────────────────────────────────────
 _CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
 
-/* ── Base reset (Couleur de fond unifiée) ── */
+/* ── Base reset ── */
 html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], .main .block-container {
     margin: 0; padding: 0;
     background: #020818 !important;
@@ -204,7 +204,7 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
     box-shadow: 0 0 24px rgba(21,101,192,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
-/* ── Boutons (Correction du flou : suppression de scale) ── */
+/* ── Boutons ── */
 .stButton > button {
     background: linear-gradient(135deg,#0a2a5e 0%,#0d47a1 40%,#1976d2 80%,#42a5f5 100%);
     color: white !important;
@@ -225,12 +225,12 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
 .stButton > button:hover::before { left: 100%; }
 .stButton > button:hover {
     box-shadow: 0 0 50px rgba(66,165,245,0.7), 0 0 100px rgba(66,165,245,0.2);
-    transform: translateY(-3px); /* Retrait de scale(1.02) pour éviter le flou */
+    transform: translateY(-3px);
     border-color: rgba(66,165,245,0.8) !important;
 }
 .stButton > button:active { transform: translateY(-1px); }
 
-/* ── Métriques (Correction du flou : suppression de scale) ── */
+/* ── Métriques ── */
 [data-testid="metric-container"] {
     background: rgba(13,71,161,0.22);
     border: 1px solid rgba(66,165,245,0.25);
@@ -347,7 +347,7 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
     border-radius: 3px; box-shadow: 0 0 8px rgba(66,165,245,0.4);
 }
 
-/* Hero card (Correction du flou : suppression du scale) */
+/* Hero card */
 .hero-card {
     background: rgba(5,20,60,0.65);
     border: 1px solid rgba(66,165,245,0.22); border-radius: 20px;
@@ -361,7 +361,7 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
     background: linear-gradient(90deg,transparent,rgba(66,165,245,0.5),transparent);
 }
 .hero-card:hover {
-    transform: translateY(-6px); /* Retrait de scale(1.01) pour éviter le flou */
+    transform: translateY(-6px);
     box-shadow: 0 24px 60px rgba(13,71,161,0.5), 0 0 0 1px rgba(66,165,245,0.25);
     border-color: rgba(66,165,245,0.45);
 }
@@ -534,7 +534,6 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
 }
 .footer span { color: #42a5f5; }
 
-/* Correction du flou : suppression du scale */
 .ext-link {
     display: block; padding: 10px 14px;
     background: linear-gradient(135deg,#0d47a1,#1976d2);
@@ -547,10 +546,10 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
 }
 .ext-link:hover {
     box-shadow: 0 0 30px rgba(66,165,245,0.5);
-    transform: translateY(-2px); /* Retrait de scale */
+    transform: translateY(-2px);
 }
 
-/* Animations globales */
+/* Animations */
 @keyframes shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,230,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(0,230,118,0); } 100% { box-shadow: 0 0 0 0 rgba(0,230,118,0); } }
 </style>
@@ -567,7 +566,6 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
         W=canvas.width=window.innerWidth;
         H=canvas.height=window.innerHeight;
     }
-    // Génération discrète de particules
     if(dust.length===0){
         for(let i=0;i<45;i++){
             dust.push({
@@ -582,11 +580,8 @@ section[data-testid="stSidebar"]::-webkit-scrollbar-thumb:hover { background: rg
         }
     }
     function draw(){
-        // Fond plat unique strict (Retrait de tout dégradé radial)
         ctx.fillStyle='#020818';
         ctx.fillRect(0,0,W,H);
-        
-        // Rendu discret des micro-poussières de lumière
         dust.forEach(p=>{
             p.x+=p.vx; p.y+=p.vy; p.phase+=0.012;
             if(p.y<-4){p.y=H+4;p.x=Math.random()*W;}
@@ -808,7 +803,6 @@ def render_ct_result(res: dict) -> None:
     ts_short = res["ts"][-8:]
     conf_pct = f"{conf*100:.1f}"
 
-    # En-tête résultat
     st.markdown(
         f"<div class='ct-result-card' style='--card-accent:{c_color};border-color:{c_border};'>"
         f"<div style='font-family:Share Tech Mono,monospace;font-size:10px;color:#90caf9;"
@@ -821,7 +815,6 @@ def render_ct_result(res: dict) -> None:
         unsafe_allow_html=True,
     )
 
-    # Barre de confiance
     st.markdown(
         f"<div class='ct-result-card' style='--card-accent:{c_color};border-color:{c_border};padding:14px 18px;'>"
         f"<div style='display:flex;justify-content:space-between;font-family:Exo 2,sans-serif;"
@@ -837,7 +830,6 @@ def render_ct_result(res: dict) -> None:
         unsafe_allow_html=True,
     )
 
-    # Statut & Urgence
     st.markdown(
         f"<div class='ct-result-card' style='--card-accent:{c_color};border-color:{c_border};padding:14px 18px;'>"
         f"<div style='display:flex;align-items:center;justify-content:between;gap:16px;'>"
@@ -854,7 +846,6 @@ def render_ct_result(res: dict) -> None:
         unsafe_allow_html=True,
     )
 
-    # Condition d'alerte RAG complémentaire
     if cls == "Tumor":
         st.markdown(
             "<div class='al al-r'><div class='al-t'>🚨 Alerte Masse Suspecte</div>"
@@ -951,7 +942,7 @@ with tab_main:
                 "<div style='font-size:3.5rem;opacity:0.15;'>🔬</div>"
                 "<div style='font-family:Exo 2,sans-serif;font-size:13px;color:#3d6b9e;text-align:center;'>"
                 "En attente d'une image CT<br>"
-                "<span style='font-family:Share Tech Mono,monospace;font-size:10px;color:#2d5a8e;'>"
+                "<span style='font-family:Share Tech Mono,monospace;font-size:10px;color:#2d5a8e fly;'>"
                 "Importez un scan pour démarrer l'analyse</span></div></div>", unsafe_allow_html=True,
             )
         else:
@@ -981,7 +972,12 @@ with tab_main:
     # Probabilités + interprétation
     if uploaded and "res" in st.session_state:
         res = st.session_state["res"]
-        cls = res["class"]; cfg = CLASS_CFG[cls]
+        cls = res["class"]
+        cfg = CLASS_CFG[cls]
+        
+        # DEFINITION DES VARIABLES DE COULEUR MANQUANTES ICI :
+        c_color = cfg["color"]
+        c_border = cfg["border"]
         
         st.markdown("<div class='glow-divider'></div>", unsafe_allow_html=True)
         st.markdown("<div class='section-title'>📊 Distribution des probabilités & Interprétation</div>", unsafe_allow_html=True)
@@ -1003,9 +999,7 @@ with tab_main:
                 t_cls = "prob-name prob-top" if is_top else "prob-name"
                 p_cls = "prob-pct prob-top" if is_top else "prob-pct"
                 c_hex = CLASS_CFG[c_name]["color"]
-                lbl = CLASS_CFG[c_name]["label"]
                 
-                badge_html = ""
                 if is_top:
                     badge_html = f"<span class='prob-badge' style='background:{c_hex};'>WINNER</span>"
                 else:
@@ -1270,7 +1264,7 @@ with tab_mon:
             st.bar_chart([t.get("latency_ms",0) for t in traces])
             
         st.markdown(
-            "<div class='ct-result-card' style='margin-top:10px;'> Gentilesse"
+            "<div class='ct-result-card' style='margin-top:10px;'>"
             "<div style='font-family:Exo 2,sans-serif;font-size:13px;color:#8aabcc;'>🌐 Dashboard complet : "
             "<a href='https://smith.langchain.com' target='_blank' style='color:#42a5f5;font-weight:700;text-decoration:none;'>smith.langchain.com</a> → Projet : "
             "<span style='color:#7c4dff;font-weight:700;'>MEDICALScan-AI</span>"
