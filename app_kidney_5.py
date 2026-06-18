@@ -73,7 +73,6 @@ def _load_secrets_extended(groq_input: str, smith_input: str) -> dict:
     
 KEYS: dict = _load_secrets_extended(user_groq_key, user_smith_key)
 
-# Activation dynamique des variables d'environnement si les clés sont fournies
 if KEYS["GROQ"]:
     os.environ["GROQ_API_KEY"] = KEYS["GROQ"]
 if KEYS["LS"]:
@@ -98,72 +97,140 @@ IMG_SIZE: tuple = (160, 160)
 
 CLASS_CFG: dict = {
     "Cyst": {
-        "color": "#42a5f5", "bg": "rgba(13,71,161,0.22)", "border": "rgba(66,165,245,0.4)",
-        "label": "Kyste rénal", "urgence": "Faible", "emoji": "💧",
-        "neon": "rgba(66,165,245,0.6)",
+        "color": "#42a5f5", "bg": "rgba(13,71,161,0.15)", "border": "rgba(66,165,245,0.3)",
+        "label": "Kyste rénal", "urgence": "Faible", "emoji": "💧", "neon": "rgba(66,165,245,0.4)"
     },
     "Normal": {
-        "color": "#00e676", "bg": "rgba(0,100,50,0.22)", "border": "rgba(0,230,118,0.4)",
-        "label": "Rein normal", "urgence": "Aucune", "emoji": "✅",
-        "neon": "rgba(0,230,118,0.6)",
+        "color": "#00e676", "bg": "rgba(0,100,50,0.15)", "border": "rgba(0,230,118,0.3)",
+        "label": "Rein normal", "urgence": "Aucune", "emoji": "✅", "neon": "rgba(0,230,118,0.4)"
     },
     "Stone": {
-        "color": "#ff9800", "bg": "rgba(100,60,0,0.22)", "border": "rgba(255,152,0,0.4)",
-        "label": "Lithiase rénale (calcul)", "urgence": "Modérée", "emoji": "🪨",
-        "neon": "rgba(255,152,0,0.6)",
+        "color": "#ff9800", "bg": "rgba(100,60,0,0.15)", "border": "rgba(255,152,0,0.3)",
+        "label": "Lithiase rénale (calcul)", "urgence": "Modérée", "emoji": "🪨", "neon": "rgba(255,152,0,0.4)"
     },
     "Tumor": {
-        "color": "#ff5252", "bg": "rgba(120,0,0,0.22)", "border": "rgba(255,82,82,0.4)",
-        "label": "Tumeur rénale", "urgence": "Élevée ⚠️", "emoji": "🔴",
-        "neon": "rgba(255,82,82,0.6)",
-    },
+        "color": "#ff5252", "bg": "rgba(120,0,0,0.15)", "border": "rgba(255,82,82,0.3)",
+        "label": "Tumeur rénale", "urgence": "Élevée ⚠️", "emoji": "🔴", "neon": "rgba(255,82,82,0.4)"
+    }
 }
 
 INTERP: dict = {
-    "Normal": (
-        "L'analyse ne révèle <strong>aucune anomalie rénale significative</strong>. "
-        "Les structures rénales apparaissent morphologiquement normales. "
-        "Un suivi de routine est recommandé selon l'âge et les facteurs de risque."
-    ),
-    "Cyst": (
-        "L'analyse identifie une <strong>formation kystique rénale</strong>. "
-        "Les kystes simples sont fréquents et généralement bénins. "
-        "Une classification Bosniak est recommandée. "
-        "Un <strong>suivi échographique à 6-12 mois</strong> est conseillé."
-    ),
-    "Stone": (
-        "L'analyse détecte la <strong>présence de calculs rénaux</strong>. "
-        "Une évaluation urologique est nécessaire pour la taille, la localisation "
-        "et la composition. Un <strong>bilan métabolique et une consultation urologique</strong> "
-        "sont recommandés."
-    ),
-    "Tumor": (
-        "L'analyse identifie une <strong>masse rénale suspecte nécessitant une évaluation urgente</strong>. "
-        "Ce résultat requiert une <strong>confirmation par IRM</strong> "
-        "et une consultation oncologique/urologique en urgence. "
-        "Ne pas différer la prise en charge."
-    ),
+    "Normal": "L'analyse ne révèle <strong>aucune anomalie rénale significative</strong>.",
+    "Cyst": "L'analyse identifie une <strong>formation kystique rénale</strong>.",
+    "Stone": "L'analyse détecte la <strong>présence de calculs rénaux</strong>.",
+    "Tumor": "L'analyse identifie une <strong>masse rénale suspecte nécessitant une évaluation urgente</strong>."
 }
 
 CTX: dict = {
-    "Cyst":   {"urgence": "Faible à modérée",                    "suivi": "Échographie à 6-12 mois"},
-    "Normal": {"urgence": "Aucune",                               "suivi": "Contrôle de routine"},
-    "Stone":  {"urgence": "Modérée — selon taille/localisation", "suivi": "Consultation urologique"},
-    "Tumor":  {"urgence": "⚠️ ÉLEVÉE — consultation urgente",    "suivi": "IRM + avis urologique urgent"},
+    "Cyst":   {"urgence": "Faible à modérée", "suivi": "Échographie à 6-12 mois"},
+    "Normal": {"urgence": "Aucune", "suivi": "Contrôle de routine"},
+    "Stone":  {"urgence": "Modérée", "suivi": "Consultation urologique"},
+    "Tumor":  {"urgence": "⚠️ ÉLEVÉE", "suivi": "IRM + avis urologique urgent"}
 }
 
-# §5 ── Design System CSS (Mis à jour pour fond unique et sans flou au hover) ──
-# §5 ── Design System CSS (Mis à jour pour fond unique et sans flou au hover) ──
+# §5 ── Design System CSS (Style de la 2ème image : sobre, sombre et sans flou) ──
 _CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* Tout le reste de votre CSS ici doit être collé sans décalage d'indentation Python */
-html, body, [data-testid="stAppViewContainer"] {
-    margin: 0; padding: 0;
+/* ── Style du fond sombre uniforme d'après la seconde image ── */
+html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-testid="stAppViewBlockContainer"] {
+    background-color: #0b0f19 !important;
+    background: #0b0f19 !important;
+    font-family: 'Inter', sans-serif !important;
+    color: #f1f5f9 !important;
+}
+
+[data-testid="stHeader"] {
+    background: #0b0f19 !important;
+    border-bottom: 1px solid #1e293b;
+}
+
+/* ── Barre latérale sombre unifiée ── */
+section[data-testid="stSidebar"] {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    border-right: 1px solid #1e293b !important;
+}
+[data-testid="stSidebar"] * {
+    color: #cbd5e1 !important;
+}
+
+/* ── Onglets épurés ── */
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid #1e293b;
+}
+[data-testid="stTabs"] [data-baseweb="tab"] {
+    color: #94a3b8 !important;
+    font-weight: 500;
+    transition: none !important;
+    filter: none !important;
+}
+[data-testid="stTabs"] [aria-selected="true"] {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border-radius: 6px;
+}
+
+/* ── Métriques et Blocs de résultats gris/bleu discrets ── */
+[data-testid="metric-container"], .ct-result-card, .sb-card, .hero-card {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    box-shadow: none !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+}
+
+[data-testid="metric-container"] label, .mon-lbl {
+    color: #94a3b8 !important;
+    font-size: 12px !important;
+    text-transform: uppercase;
+}
+
+[data-testid="metric-container"] [data-testid="stMetricValue"], .mon-val {
+    color: #38bdf8 !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+}
+
+/* Boutons */
+.stButton > button {
+    background: #2563eb !important;
+    color: white !important;
+    border: 1px solid #3b82f6 !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    transition: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+}
+.stButton > button:hover {
+    background: #1d4ed8 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+/* Structure de jauge propre */
+.prob-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+.prob-name { color: #f1f5f9; font-size: 13px; width: 70px; }
+.prob-track { flex: 1; height: 10px; background: #334155; border-radius: 999px; overflow: hidden; }
+.prob-fill { height: 100%; border-radius: 999px; }
+.prob-pct { color: #94a3b8; font-size: 13px; width: 45px; text-align: right; }
+
+/* Enlever les animations parasites de canevas et lignes */
+#ai-bg-canvas, [data-testid="stMain"]::after {
+    display: none !important;
+    content: none !important;
 }
 </style>
 """
+st.markdown(_CSS, unsafe_allow_html=True)
 # §6 ── Sidebar ────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
