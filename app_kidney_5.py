@@ -128,8 +128,7 @@ CTX: dict = {
     "Tumor":  {"urgence": "⚠️ ÉLEVÉE", "suivi": "IRM + avis urologique urgent"}
 }
 
-# §5 ── Design System CSS (Style de la 2ème image : sobre, sombre et sans flou) ──
-# §5 ── Design System CSS (Correction définitive des contrastes et de la cohérence globale) ──
+# §5 ── Design System CSS (Style sombre cohérent, correction totale Inputs, Boutons et Textes IA) ──
 _CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -139,7 +138,7 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-te
     background-color: #0b0f19 !important;
     background: #0b0f19 !important;
     font-family: 'Inter', sans-serif !important;
-    color: #ffffff !important; /* Texte principal forcé en blanc */
+    color: #ffffff !important;
 }
 
 [data-testid="stHeader"] {
@@ -147,8 +146,11 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-te
     border-bottom: 1px solid #1e293b;
 }
 
-/* Textes de paragraphes, spans et markdown génériques */
-[data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] span {
+/* Forçage global des textes génériques Markdown en blanc */
+[data-testid="stMarkdownContainer"] p, 
+[data-testid="stMarkdownContainer"] span, 
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stMarkdownContainer"] strong {
     color: #ffffff !important;
 }
 
@@ -159,13 +161,92 @@ section[data-testid="stSidebar"] {
     border-right: 1px solid #1e293b !important;
 }
 section[data-testid="stSidebar"] * {
-    color: #ffffff !important; /* Force tout le texte de la sidebar en blanc */
+    color: #ffffff !important;
 }
 section[data-testid="stSidebar"] label p {
-    color: #38bdf8 !important; /* Labels de la sidebar en bleu clair */
+    color: #38bdf8 !important;
 }
 
-/* ── 3. ONGLETS (TABS) ── */
+/* ── 3. INPUTS ET TEXTAREAS (SAISIES TEXTE CHAT / API) ── */
+/* Force le fond sombre et le texte blanc sur TOUS les champs de saisie de Streamlit */
+.stTextInput input, 
+.stTextArea textarea,
+[data-testid="stWidgetLabel"] p,
+div[data-baseweb="input"] input,
+div[data-baseweb="textarea"] textarea {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border: 1px solid #334155 !important;
+    border-radius: 6px !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Style au focus de l'input */
+.stTextInput input:focus, .stTextArea textarea:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 1px #2563eb !important;
+}
+
+/* ── 4. CHAT ET RÉPONSES DE L'IA (MÉDICAL & RAG) ── */
+/* Conteneur global des messages de chat */
+.stChatMessage, [data-testid="stChatMessage"] {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+}
+
+/* Blocs spécifiques des réponses IA (alertes de diagnostic .al, boîtes d'info, etc.) */
+.ct-result-card, .info-box, .sum-card, .sum-de-card, .de-box, .audio-box {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+}
+
+/* Correction des styles d'alertes médicales personnalisés (.al-r, .al-o, etc.) */
+.al { border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
+.al-b { color: #ffffff !important; font-size: 13px; }
+.al-t { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+
+.al-r { background: #2d1616 !important; border: 1px solid #ef4444 !important; border-left: 4px solid #ef4444 !important; }
+.al-r .al-t { color: #fca5a5 !important; }
+.al-o { background: #2a1a10 !important; border: 1px solid #f97316 !important; border-left: 4px solid #f97316 !important; }
+.al-o .al-t { color: #fdba74 !important; }
+.al-b2 { background: #172554 !important; border: 1px solid #3b82f6 !important; border-left: 4px solid #3b82f6 !important; }
+.al-b2 .al-t { color: #93c5fd !important; }
+.al-g { background: #064e3b !important; border: 1px solid #10b981 !important; border-left: 4px solid #10b981 !important; }
+.al-g .al-t { color: #6ee7b7 !important; }
+
+/* Forçage des textes gras ou spécifiques dans les boîtes d'informations */
+.info-box strong, .sum-body strong, .de-b strong {
+    color: #38bdf8 !important;
+}
+
+/* ── 5. BOUTONS (MÊME LE SURVOL / HOVER) ── */
+.stButton > button, [data-testid="stBaseButton-secondary"] {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border: 1px solid #3b82f6 !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    transition: background 0.15s ease !important;
+}
+.stButton > button:hover, [data-testid="stBaseButton-secondary"]:hover {
+    background: #1d4ed8 !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+}
+.stButton > button:active, [data-testid="stBaseButton-secondary"]:active {
+    background: #1e40af !important;
+    color: #ffffff !important;
+}
+
+/* ── 6. ONGLETS (TABS) ── */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
     background: #0f172a !important;
     border-radius: 8px;
@@ -173,82 +254,58 @@ section[data-testid="stSidebar"] label p {
     border: 1px solid #1e293b;
 }
 [data-testid="stTabs"] [data-baseweb="tab"] {
-    color: #94a3b8 !important; /* Onglet inactif : gris clair */
+    color: #94a3b8 !important;
     font-weight: 600;
 }
 [data-testid="stTabs"] [data-baseweb="tab"]:hover {
-    color: #ffffff !important; /* Onglet survolé : blanc */
+    color: #ffffff !important;
     background: rgba(30, 41, 59, 0.5) !important;
 }
 [data-testid="stTabs"] [aria-selected="true"] {
-    background: #2563eb !important; /* Onglet actif : bleu */
-    color: #ffffff !important;      /* Texte de l'onglet actif : blanc */
+    background: #2563eb !important;
+    color: #ffffff !important;
     border-radius: 6px;
 }
 
-/* ── 4. BOUTONS (MÊME AU HOVER) ── */
-.stButton > button {
-    background: #2563eb !important; /* Fond bleu */
-    color: #ffffff !important;      /* Texte blanc pur */
-    border: 1px solid #3b82f6 !important;
-    border-radius: 6px !important;
-    font-weight: 600 !important;
-    box-shadow: none !important;
-}
-.stButton > button:hover {
-    background: #1d4ed8 !important; /* Fond bleu plus sombre au survol */
-    color: #ffffff !important;      /* Reste strictement blanc au survol */
-    border-color: #2563eb !important;
-}
-.stButton > button:active {
-    background: #1e40af !important;
-    color: #ffffff !important;
-}
-
-/* ── 5. BLOCS ET MÉTRIQUES (MEDICAL STATE FIX) ── */
+/* ── 7. MÉTRIQUES (MEDICAL STATE FIX) ── */
 [data-testid="metric-container"], 
 div[data-testid="stMetric"], 
 .stMetric,
-.ct-result-card, 
 .sb-card, 
 .hero-card {
-    background-color: #1e293b !important; /* Fond bleu nuit uniforme */
+    background-color: #1e293b !important;
     background: #1e293b !important;
     border: 1px solid #334155 !important;
     border-radius: 8px !important;
     padding: 16px !important;
 }
-
-/* Labels des métriques */
 [data-testid="metric-container"] label, 
 div[data-testid="stMetric"] label,
 .stMetric label,
 .mon-lbl {
-    color: #94a3b8 !important; /* Gris-bleu clair très lisible */
+    color: #94a3b8 !important;
     font-size: 12px !important;
     text-transform: uppercase !important;
     -webkit-text-fill-color: #94a3b8 !important;
 }
-
-/* Valeurs numériques ou textuelles des métriques */
 [data-testid="metric-container"] [data-testid="stMetricValue"], 
 div[data-testid="stMetric"] [data-testid="stMetricValue"],
 .stMetric [data-testid="stMetricValue"],
 .mon-val {
-    color: #38bdf8 !important; /* Bleu céleste vif et contrasté */
+    color: #38bdf8 !important;
     font-size: 24px !important;
     font-weight: 700 !important;
     -webkit-text-fill-color: #38bdf8 !important;
 }
 
-/* ── 6. JAUGE DE PROBABILITÉ PROPRE ── */
+/* ── 8. JAUGE DE PROBABILITÉ PROPRE ── */
 .prob-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
 .prob-name { color: #ffffff !important; font-size: 13px; width: 70px; }
 .prob-track { flex: 1; height: 10px; background: #334155; border-radius: 999px; overflow: hidden; }
 .prob-fill { height: 100%; border-radius: 999px; }
 .prob-pct { color: #38bdf8 !important; font-size: 13px; width: 45px; text-align: right; font-weight: 600; }
 
-/* Désactivation définitive des anciennes lignes de fond */
+/* Masquer les éléments obsolètes en arrière-plan */
 #ai-bg-canvas, [data-testid="stMain"]::after {
     display: none !important;
     content: none !important;
