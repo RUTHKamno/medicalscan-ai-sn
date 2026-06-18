@@ -127,8 +127,7 @@ CTX: dict = {
     "Stone":  {"urgence": "Modérée", "suivi": "Consultation urologique"},
     "Tumor":  {"urgence": "⚠️ ÉLEVÉE", "suivi": "IRM + avis urologique urgent"}
 }
-
-# §5 ── Design System CSS (Style sombre cohérent, correction totale Inputs, Boutons et Textes IA) ──
+# §5 ── Design System CSS (Style sombre unifié : Correction absolue de st.chat_input, Inputs et RAG) ──
 _CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -146,12 +145,14 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-te
     border-bottom: 1px solid #1e293b;
 }
 
-/* Forçage global des textes génériques Markdown en blanc */
+/* Forçage des éléments textuels génériques en blanc pur */
 [data-testid="stMarkdownContainer"] p, 
 [data-testid="stMarkdownContainer"] span, 
 [data-testid="stMarkdownContainer"] li,
-[data-testid="stMarkdownContainer"] strong {
+[data-testid="stMarkdownContainer"] strong,
+.stChatMessage p {
     color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
 }
 
 /* ── 2. BARRE LATÉRALE (SIDEBAR) ── */
@@ -167,38 +168,64 @@ section[data-testid="stSidebar"] label p {
     color: #38bdf8 !important;
 }
 
-/* ── 3. INPUTS ET TEXTAREAS (SAISIES TEXTE CHAT / API) ── */
-/* Force le fond sombre et le texte blanc sur TOUS les champs de saisie de Streamlit */
+/* ── 3. CORRECTION ABSOLUTE DES INPUTS ET DU CHAT INPUT (ST.CHAT_INPUT) ── */
+/* Cible à la fois st.text_input, st.text_area et la barre d'envoi st.chat_input */
 .stTextInput input, 
 .stTextArea textarea,
-[data-testid="stWidgetLabel"] p,
+[data-testid="stChatInput"] textarea,
+.stChatInput textarea,
 div[data-baseweb="input"] input,
-div[data-baseweb="textarea"] textarea {
+div[data-baseweb="textarea"] textarea,
+div[data-testid="stChatInput"] {
     background-color: #1e293b !important;
     background: #1e293b !important;
     color: #ffffff !important;
     border: 1px solid #334155 !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
     -webkit-text-fill-color: #ffffff !important;
 }
 
-/* Style au focus de l'input */
-.stTextInput input:focus, .stTextArea textarea:focus {
-    border-color: #2563eb !important;
-    box-shadow: 0 0 0 1px #2563eb !important;
+/* Gestion du conteneur parent de la barre de chat Streamlit pour éviter qu'il reste blanc */
+[data-testid="stChatInput"] {
+    padding: 10px !important;
+    background-color: #0b0f19 !important; /* Fusionne discrètement avec le fond de page */
 }
 
-/* ── 4. CHAT ET RÉPONSES DE L'IA (MÉDICAL & RAG) ── */
-/* Conteneur global des messages de chat */
+/* Forçage de la couleur du texte tapé à l'intérieur du chat input */
+[data-testid="stChatInput"] textarea {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Bouton d'envoi de la barre de chat (la petite flèche) */
+[data-testid="stChatInput"] button {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+}
+[data-testid="stChatInput"] button:hover {
+    background-color: #1d4ed8 !important;
+}
+[data-testid="stChatInput"] buttonsvg, [data-testid="stChatInput"] svg {
+    fill: #ffffff !important; /* Force la flèche à devenir blanche */
+    color: #ffffff !important;
+}
+
+/* Textes d'instructions temporaires (Placeholders) */
+::placeholder, [data-baseweb="input"]::placeholder, textarea::placeholder {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+}
+
+/* ── 4. MESSAGES DE CHAT ET BLOCS IA ── */
 .stChatMessage, [data-testid="stChatMessage"] {
     background-color: #1e293b !important;
     background: #1e293b !important;
     border: 1px solid #334155 !important;
     border-radius: 8px !important;
-    color: #ffffff !important;
 }
 
-/* Blocs spécifiques des réponses IA (alertes de diagnostic .al, boîtes d'info, etc.) */
+/* Blocs spécifiques du RAG et alertes */
 .ct-result-card, .info-box, .sum-card, .sum-de-card, .de-box, .audio-box {
     background-color: #1e293b !important;
     background: #1e293b !important;
@@ -206,12 +233,14 @@ div[data-baseweb="textarea"] textarea {
     color: #ffffff !important;
     border-radius: 8px !important;
 }
+.info-box strong, .sum-body strong, .de-b strong {
+    color: #38bdf8 !important;
+}
 
-/* Correction des styles d'alertes médicales personnalisés (.al-r, .al-o, etc.) */
+/* Structures d'alertes de diagnostics (.al-r, .al-o...) */
 .al { border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
 .al-b { color: #ffffff !important; font-size: 13px; }
 .al-t { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-
 .al-r { background: #2d1616 !important; border: 1px solid #ef4444 !important; border-left: 4px solid #ef4444 !important; }
 .al-r .al-t { color: #fca5a5 !important; }
 .al-o { background: #2a1a10 !important; border: 1px solid #f97316 !important; border-left: 4px solid #f97316 !important; }
@@ -221,12 +250,7 @@ div[data-baseweb="textarea"] textarea {
 .al-g { background: #064e3b !important; border: 1px solid #10b981 !important; border-left: 4px solid #10b981 !important; }
 .al-g .al-t { color: #6ee7b7 !important; }
 
-/* Forçage des textes gras ou spécifiques dans les boîtes d'informations */
-.info-box strong, .sum-body strong, .de-b strong {
-    color: #38bdf8 !important;
-}
-
-/* ── 5. BOUTONS (MÊME LE SURVOL / HOVER) ── */
+/* ── 5. BOUTONS STANDARDS ── */
 .stButton > button, [data-testid="stBaseButton-secondary"] {
     background: #2563eb !important;
     color: #ffffff !important;
@@ -234,78 +258,46 @@ div[data-baseweb="textarea"] textarea {
     border-radius: 6px !important;
     font-weight: 600 !important;
     box-shadow: none !important;
-    transition: background 0.15s ease !important;
 }
 .stButton > button:hover, [data-testid="stBaseButton-secondary"]:hover {
     background: #1d4ed8 !important;
     color: #ffffff !important;
     border-color: #2563eb !important;
 }
-.stButton > button:active, [data-testid="stBaseButton-secondary"]:active {
-    background: #1e40af !important;
-    color: #ffffff !important;
-}
 
-/* ── 6. ONGLETS (TABS) ── */
-[data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: #0f172a !important;
-    border-radius: 8px;
-    padding: 4px;
-    border: 1px solid #1e293b;
-}
-[data-testid="stTabs"] [data-baseweb="tab"] {
-    color: #94a3b8 !important;
-    font-weight: 600;
-}
-[data-testid="stTabs"] [data-baseweb="tab"]:hover {
-    color: #ffffff !important;
-    background: rgba(30, 41, 59, 0.5) !important;
-}
-[data-testid="stTabs"] [aria-selected="true"] {
-    background: #2563eb !important;
-    color: #ffffff !important;
-    border-radius: 6px;
-}
-
-/* ── 7. MÉTRIQUES (MEDICAL STATE FIX) ── */
-[data-testid="metric-container"], 
-div[data-testid="stMetric"], 
-.stMetric,
-.sb-card, 
-.hero-card {
+/* ── 6. MÉTRIQUES (MEDICAL STATE FIX) ── */
+[data-testid="metric-container"], div[data-testid="stMetric"], .stMetric, .sb-card, .hero-card {
     background-color: #1e293b !important;
     background: #1e293b !important;
     border: 1px solid #334155 !important;
     border-radius: 8px !important;
     padding: 16px !important;
 }
-[data-testid="metric-container"] label, 
-div[data-testid="stMetric"] label,
-.stMetric label,
-.mon-lbl {
+[data-testid="metric-container"] label, div[data-testid="stMetric"] label, .stMetric label, .mon-lbl {
     color: #94a3b8 !important;
     font-size: 12px !important;
     text-transform: uppercase !important;
     -webkit-text-fill-color: #94a3b8 !important;
 }
-[data-testid="metric-container"] [data-testid="stMetricValue"], 
-div[data-testid="stMetric"] [data-testid="stMetricValue"],
-.stMetric [data-testid="stMetricValue"],
-.mon-val {
+[data-testid="metric-container"] [data-testid="stMetricValue"], div[data-testid="stMetric"] [data-testid="stMetricValue"], .stMetric [data-testid="stMetricValue"], .mon-val {
     color: #38bdf8 !important;
     font-size: 24px !important;
     font-weight: 700 !important;
     -webkit-text-fill-color: #38bdf8 !important;
 }
 
-/* ── 8. JAUGE DE PROBABILITÉ PROPRE ── */
+/* ── 7. ENGLÈTES ET JAUGES ── */
+[data-testid="stTabs"] [data-baseweb="tab-list"] { background: #0f172a !important; border-radius: 8px; padding: 4px; border: 1px solid #1e293b; }
+[data-testid="stTabs"] [data-baseweb="tab"] { color: #94a3b8 !important; font-weight: 600; }
+[data-testid="stTabs"] [data-baseweb="tab"]:hover { color: #ffffff !important; background: rgba(30, 41, 59, 0.5) !important; }
+[data-testid="stTabs"] [aria-selected="true"] { background: #2563eb !important; color: #ffffff !important; border-radius: 6px; }
+
 .prob-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
 .prob-name { color: #ffffff !important; font-size: 13px; width: 70px; }
 .prob-track { flex: 1; height: 10px; background: #334155; border-radius: 999px; overflow: hidden; }
 .prob-fill { height: 100%; border-radius: 999px; }
 .prob-pct { color: #38bdf8 !important; font-size: 13px; width: 45px; text-align: right; font-weight: 600; }
 
-/* Masquer les éléments obsolètes en arrière-plan */
 #ai-bg-canvas, [data-testid="stMain"]::after {
     display: none !important;
     content: none !important;
