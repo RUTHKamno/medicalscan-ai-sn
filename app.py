@@ -666,7 +666,7 @@ def _langsmith_log(run_name: str, inputs: dict, outputs: dict, meta: dict) -> di
 
 def call_llm(messages, system, run_name="llm_call", max_tok=1000):
     if not KEYS["GROQ"]:
-        return "❌ Clé Groq manquante dans `.streamlit/secrets.toml`.", {}
+        return "❌ Clé Groq manquante", {}
     t0 = datetime.datetime.now()
     try:
         from groq import Groq
