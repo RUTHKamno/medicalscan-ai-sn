@@ -3,7 +3,7 @@
 ║  MEDICALScan AI  ·  Application Streamlit                                    ║
 ║  Classification CT Rénale  ·  KidneyClassifier v5  ·  AUC 1.00               ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║  Groupe 2 · M2 IABD · KAMNO · 2026                   ║
+║  Groupe 2 · M2 IABD · KAMNO · 2026                                           ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 """
 # §1 ── Imports & configuration ────────────────────────────────────────────────
