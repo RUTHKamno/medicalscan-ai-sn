@@ -801,7 +801,7 @@ with tab_scan:
                     "background:rgba(13,71,161,0.18);border-radius:6px;"
                     "padding:4px 8px;margin:6px -8px;"
                 ) if ip else (
-                    "background:rgba(255,255,255,0.92);border-radius:6px;"
+                    "background:rgba(58,109,207,0.92);border-radius:6px;"
                     "padding:4px 8px;margin:3px -8px;"
                 )
 
