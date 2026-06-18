@@ -127,7 +127,7 @@ CTX: dict = {
     "Stone":  {"urgence": "Modérée", "suivi": "Consultation urologique"},
     "Tumor":  {"urgence": "⚠️ ÉLEVÉE", "suivi": "IRM + avis urologique urgent"}
 }
-# §5 ── Design System CSS (Style sombre unifié : Correction absolue de st.chat_input, Inputs et RAG) ──
+# §5 ── Design System CSS (Style sombre unifié : Correction absolue des Selectbox, du Softmax et des Textes) ──
 _CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -145,38 +145,87 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-te
     border-bottom: 1px solid #1e293b;
 }
 
-/* Forçage des éléments textuels génériques en blanc pur */
+/* Forçage absolu de tous les textes basiques en blanc pur */
 [data-testid="stMarkdownContainer"] p, 
 [data-testid="stMarkdownContainer"] span, 
 [data-testid="stMarkdownContainer"] li,
 [data-testid="stMarkdownContainer"] strong,
-.stChatMessage p {
+.stChatMessage p,
+p, span, label {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
 }
 
-/* ── 2. BARRE LATÉRALE (SIDEBAR) ── */
-section[data-testid="stSidebar"] {
-    background-color: #0f172a !important;
-    background: #0f172a !important;
-    border-right: 1px solid #1e293b !important;
-}
-section[data-testid="stSidebar"] * {
+/* ── 2. CORRECTION CRITIQUE DES SELECTBOX (SÉLECTEUR DE MODÈLES ET LANGUES) ── */
+/* Force le conteneur du selectbox, la liste déroulante et le texte sélectionné à être parfaitement visibles */
+.stSelectbox div[data-baseweb="select"], 
+.stSelectbox [data-testid="stWidgetLabel"] p,
+div[role="listbox"], 
+div[aria-haspopup="listbox"],
+[data-baseweb="select"] * {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
     color: #ffffff !important;
-}
-section[data-testid="stSidebar"] label p {
-    color: #38bdf8 !important;
+    border-color: #334155 !important;
+    -webkit-text-fill-color: #ffffff !important;
 }
 
-/* ── 3. CORRECTION ABSOLUTE DES INPUTS ET DU CHAT INPUT (ST.CHAT_INPUT) ── */
-/* Cible à la fois st.text_input, st.text_area et la barre d'envoi st.chat_input */
+/* Force les options à l'intérieur du menu déroulant quand on clique dessus */
+ul[role="listbox"] li, [data-baseweb="popover"] * {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+ul[role="listbox"] li:hover {
+    background-color: #2563eb !important; /* Fond bleu au survol de l'option */
+}
+
+/* ── 3. CORRECTION TOTALE DU SOFTMAX (TOUTES LES CLASSES, MÊME FAIBLES) ── */
+.prob-row { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 12px !important; 
+    margin: 8px 0 !important; 
+}
+
+/* Force le nom de TOUTES les classes (sélectionnées ou non) en blanc pur bien visible */
+.prob-name, .prob-name.prob-top, [style*="width:65px"], [style*="width: 65px"] { 
+    color: #ffffff !important; 
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: 13px !important; 
+    font-weight: 600 !important;
+    width: 80px !important; 
+    flex-shrink: 0 !important;
+}
+
+/* Force le pourcentage de TOUTES les classes à être bleu clair et visible */
+.prob-pct, .prob-pct.prob-top, [style*="width:46px"], [style*="width: 46px"] { 
+    color: #38bdf8 !important; 
+    -webkit-text-fill-color: #38bdf8 !important;
+    font-size: 13px !important; 
+    font-weight: 600 !important;
+    width: 50px !important; 
+    text-align: right !important; 
+    flex-shrink: 0 !important;
+}
+
+/* Conteneur de la barre de progression arrière-plan */
+.prob-track { 
+    flex: 1 !important; 
+    height: 10px !important; 
+    background-color: #334155 !important; 
+    background: #334155 !important;
+    border-radius: 999px !important; 
+    overflow: hidden !important; 
+    border: none !important;
+}
+
+/* ── 4. CHAT INPUT, INPUTS TEXTES & COHÉRENCE ── */
 .stTextInput input, 
 .stTextArea textarea,
 [data-testid="stChatInput"] textarea,
 .stChatInput textarea,
-div[data-baseweb="input"] input,
-div[data-baseweb="textarea"] textarea,
-div[data-testid="stChatInput"] {
+div[data-baseweb="input"] input {
     background-color: #1e293b !important;
     background: #1e293b !important;
     color: #ffffff !important;
@@ -185,59 +234,51 @@ div[data-testid="stChatInput"] {
     -webkit-text-fill-color: #ffffff !important;
 }
 
-/* Gestion du conteneur parent de la barre de chat Streamlit pour éviter qu'il reste blanc */
 [data-testid="stChatInput"] {
     padding: 10px !important;
-    background-color: #0b0f19 !important; /* Fusionne discrètement avec le fond de page */
+    background-color: #0b0f19 !important;
 }
 
-/* Forçage de la couleur du texte tapé à l'intérieur du chat input */
-[data-testid="stChatInput"] textarea {
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-}
-
-/* Bouton d'envoi de la barre de chat (la petite flèche) */
 [data-testid="stChatInput"] button {
     background-color: #2563eb !important;
     color: #ffffff !important;
-    border-radius: 6px !important;
 }
-[data-testid="stChatInput"] button:hover {
-    background-color: #1d4ed8 !important;
-}
-[data-testid="stChatInput"] buttonsvg, [data-testid="stChatInput"] svg {
-    fill: #ffffff !important; /* Force la flèche à devenir blanche */
+
+[data-testid="stChatInput"] svg {
+    fill: #ffffff !important;
     color: #ffffff !important;
 }
 
-/* Textes d'instructions temporaires (Placeholders) */
-::placeholder, [data-baseweb="input"]::placeholder, textarea::placeholder {
-    color: #64748b !important;
-    -webkit-text-fill-color: #64748b !important;
-}
-
-/* ── 4. MESSAGES DE CHAT ET BLOCS IA ── */
-.stChatMessage, [data-testid="stChatMessage"] {
+/* ── 5. BLOCS DE RÉSULTATS, MÉTRIQUES ET RAG ── */
+[data-testid="metric-container"], 
+div[data-testid="stMetric"], 
+.stMetric,
+.ct-result-card, 
+.sb-card, 
+.hero-card,
+.info-box, .sum-card, .sum-de-card, .de-box, .audio-box {
     background-color: #1e293b !important;
     background: #1e293b !important;
     border: 1px solid #334155 !important;
     border-radius: 8px !important;
+    color: #ffffff !important;
 }
 
-/* Blocs spécifiques du RAG et alertes */
-.ct-result-card, .info-box, .sum-card, .sum-de-card, .de-box, .audio-box {
-    background-color: #1e293b !important;
-    background: #1e293b !important;
-    border: 1px solid #334155 !important;
-    color: #ffffff !important;
-    border-radius: 8px !important;
+/* Métriques (Labels en gris/bleu, Valeurs en bleu ciel très vif) */
+[data-testid="metric-container"] label, div[data-testid="stMetric"] label, .mon-lbl {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
 }
-.info-box strong, .sum-body strong, .de-b strong {
+[data-testid="metric-container"] [data-testid="stMetricValue"], div[data-testid="stMetric"] [data-testid="stMetricValue"], .mon-val {
     color: #38bdf8 !important;
+    -webkit-text-fill-color: #38bdf8 !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
 }
 
-/* Structures d'alertes de diagnostics (.al-r, .al-o...) */
+/* Boîtes d'alertes médicales RAG */
 .al { border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
 .al-b { color: #ffffff !important; font-size: 13px; }
 .al-t { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
@@ -250,53 +291,24 @@ div[data-testid="stChatInput"] {
 .al-g { background: #064e3b !important; border: 1px solid #10b981 !important; border-left: 4px solid #10b981 !important; }
 .al-g .al-t { color: #6ee7b7 !important; }
 
-/* ── 5. BOUTONS STANDARDS ── */
+/* ── 6. BOUTONS STANDARDS ── */
 .stButton > button, [data-testid="stBaseButton-secondary"] {
     background: #2563eb !important;
     color: #ffffff !important;
     border: 1px solid #3b82f6 !important;
     border-radius: 6px !important;
     font-weight: 600 !important;
-    box-shadow: none !important;
 }
 .stButton > button:hover, [data-testid="stBaseButton-secondary"]:hover {
     background: #1d4ed8 !important;
     color: #ffffff !important;
-    border-color: #2563eb !important;
 }
 
-/* ── 6. MÉTRIQUES (MEDICAL STATE FIX) ── */
-[data-testid="metric-container"], div[data-testid="stMetric"], .stMetric, .sb-card, .hero-card {
-    background-color: #1e293b !important;
-    background: #1e293b !important;
-    border: 1px solid #334155 !important;
-    border-radius: 8px !important;
-    padding: 16px !important;
-}
-[data-testid="metric-container"] label, div[data-testid="stMetric"] label, .stMetric label, .mon-lbl {
-    color: #94a3b8 !important;
-    font-size: 12px !important;
-    text-transform: uppercase !important;
-    -webkit-text-fill-color: #94a3b8 !important;
-}
-[data-testid="metric-container"] [data-testid="stMetricValue"], div[data-testid="stMetric"] [data-testid="stMetricValue"], .stMetric [data-testid="stMetricValue"], .mon-val {
-    color: #38bdf8 !important;
-    font-size: 24px !important;
-    font-weight: 700 !important;
-    -webkit-text-fill-color: #38bdf8 !important;
-}
-
-/* ── 7. ENGLÈTES ET JAUGES ── */
+/* ── 7. ONGLETS (TABS) ── */
 [data-testid="stTabs"] [data-baseweb="tab-list"] { background: #0f172a !important; border-radius: 8px; padding: 4px; border: 1px solid #1e293b; }
 [data-testid="stTabs"] [data-baseweb="tab"] { color: #94a3b8 !important; font-weight: 600; }
 [data-testid="stTabs"] [data-baseweb="tab"]:hover { color: #ffffff !important; background: rgba(30, 41, 59, 0.5) !important; }
 [data-testid="stTabs"] [aria-selected="true"] { background: #2563eb !important; color: #ffffff !important; border-radius: 6px; }
-
-.prob-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
-.prob-name { color: #ffffff !important; font-size: 13px; width: 70px; }
-.prob-track { flex: 1; height: 10px; background: #334155; border-radius: 999px; overflow: hidden; }
-.prob-fill { height: 100%; border-radius: 999px; }
-.prob-pct { color: #38bdf8 !important; font-size: 13px; width: 45px; text-align: right; font-weight: 600; }
 
 #ai-bg-canvas, [data-testid="stMain"]::after {
     display: none !important;
