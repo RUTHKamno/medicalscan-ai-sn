@@ -133,7 +133,7 @@ _CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ── Style du fond sombre uniforme d'après la seconde image ── */
+/* ── Fond sombre uniforme d'après la seconde image ── */
 html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-testid="stAppViewBlockContainer"] {
     background-color: #0b0f19 !important;
     background: #0b0f19 !important;
@@ -175,7 +175,7 @@ section[data-testid="stSidebar"] {
     border-radius: 6px;
 }
 
-/* ── Métriques et Blocs de résultats gris/bleu discrets ── */
+/* ── Métriques & Blocs (Correction contraste Medical State) ── */
 [data-testid="metric-container"], .ct-result-card, .sb-card, .hero-card {
     background: #1e293b !important;
     border: 1px solid #334155 !important;
@@ -187,16 +187,19 @@ section[data-testid="stSidebar"] {
     transition: none !important;
 }
 
+/* Forçage d'une couleur sombre et lisible pour les labels et valeurs des métriques */
 [data-testid="metric-container"] label, .mon-lbl {
     color: #94a3b8 !important;
     font-size: 12px !important;
-    text-transform: uppercase;
+    text-transform: uppercase !important;
+    -webkit-text-fill-color: #94a3b8 !important;
 }
 
 [data-testid="metric-container"] [data-testid="stMetricValue"], .mon-val {
     color: #38bdf8 !important;
     font-size: 22px !important;
     font-weight: 600 !important;
+    -webkit-text-fill-color: #38bdf8 !important;
 }
 
 /* Boutons */
@@ -223,7 +226,6 @@ section[data-testid="stSidebar"] {
 .prob-fill { height: 100%; border-radius: 999px; }
 .prob-pct { color: #94a3b8; font-size: 13px; width: 45px; text-align: right; }
 
-/* Enlever les animations parasites de canevas et lignes */
 #ai-bg-canvas, [data-testid="stMain"]::after {
     display: none !important;
     content: none !important;
