@@ -176,10 +176,10 @@ section[data-testid="stSidebar"] {
 div[data-baseweb="input"] input {
     background-color: #0d1f3c !important;
     background: #0d1f3c !important;
-    color: #ffffff !important;
+    color: #ffffff !important; /* ← S'assurer que c'est bien #ffffff */
     border: 1px solid rgba(66,165,245,0.3) !important;
     border-radius: 10px !important;
-    -webkit-text-fill-color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important; /* ← AJOUTER OU FIXER CECI EN #ffffff POUR LA SAISIE UTILSATEUR */
 }
 
 /* Menu déroulant des selectbox */
