@@ -139,7 +139,7 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-te
     background-color: #020818 !important;
     background: #020818 !important; /* Même couleur de fond partout */
     font-family: 'Exo 2', sans-serif;
-    color: #e0eaff !important;
+    color: #E5E3F5 !important;
 }
 
 [data-testid="stHeader"] {
