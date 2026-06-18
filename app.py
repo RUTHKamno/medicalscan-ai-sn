@@ -1217,7 +1217,7 @@ with tab_sum:
         ctx_data = CTX[cls]
         export = (
             f"MEDICALScan AI — COMPTE RENDU · {res['ts']}\n"
-            f"MBOG\n{'='*60}\n"
+            f"KAMNO RUTH\n{'='*60}\n"
             f"Classe : {cls} ({cfg['label']}) | Confiance : {conf*100:.1f}%\n"
             f"Urgence : {ctx_data['urgence']} | Suivi : {ctx_data['suivi']}\n"
             f"{'='*60} RÉSUMÉ FR {'='*60}\n{summary['fr']}\n"
@@ -1287,7 +1287,7 @@ st.markdown(
     "<div>⚠️ <span>Avertissement médical</span> : Ce système est un outil d'aide à la décision basé sur l'IA. "
     "Il ne remplace en aucun cas un diagnostic médical établi par un professionnel qualifié. "
     "Tout résultat doit être confirmé par un radiologue ou médecin spécialiste.</div>"
-    "<div style='margin-top:10px; opacity:0.4; font-size:9px;'>MEDICALScan-AI · MBOG · v5.0 · Multi-Tab Pipeline Architecture</div>"
+    "<div style='margin-top:10px; opacity:0.4; font-size:9px;'>MEDICALScan-AI · KAMNO RUTH · v5.0 · Multi-Tab Pipeline Architecture</div>"
     "</div>",
     unsafe_allow_html=True,
 )
